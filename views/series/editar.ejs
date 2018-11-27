@@ -8,6 +8,11 @@
                 <div class="form-group">
                     <label for="name">Nome: </label>
                     <input value="<%= serie.name %>" type="text" id="name" name="name" class="form-control"> 
+                    <% if(errors && errors.indexOf('name') >= 0) { %>
+                        <small class="form-text text-muted">
+                            Por favor, informe o nome da série
+                        </small>
+                    <% } %>    
                 </div>
                 <div class="form-group">
                     <label for="status">Situação: </label>
