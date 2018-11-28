@@ -4,8 +4,32 @@ const labels = [
     { id: 'watched', value: 'Assistido' }
 ]
 
+const pagination = async(model, conditions, params) => {
+    const total = await model.countDocuments(conditions)
+    const pageSize = parseInt(params.pageSize) || 5
+    const currentPage = parseInt(params.page) || 0
+
+    const resto = parseInt(total % pageSize) > 0 ? 1 : 0
+
+    const pag = {
+        currentPage,
+        pageSize,
+        pages: parseInt(total/pageSize) + resto
+    }
+
+    const results = await model
+                            .find(conditions)
+                            .skip(currentPage * pageSize)
+                            .limit(pageSize)
+
+    return {
+        data: results,
+        pag
+    }                            
+}
+
 const index = async ({ Serie }, req, res) => {
-    const series = await Serie.find({})
+    const series = await pagination(Serie, {}, req.query)
     res.render('series/index', { series, labels })
 }
 
